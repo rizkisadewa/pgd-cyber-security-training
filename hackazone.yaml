@@ -1,0 +1,22 @@
+# docker-compose.yml
+version: "3.8"
+
+services:
+  hackazon:
+    image: mutzel/all-in-one-hackazon:postinstall   # change if you prefer another image
+    container_name: hackazon
+    restart: unless-stopped
+    ports:
+      - "8080:80"            # map host 8080 -> container 80
+    environment:
+      - HACKAZON_DB_PASSWORD=hackazon_db_pw   # if the image supports env config
+    volumes:
+      - hackazon_data:/var/www/html            # optional, adjust per image
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  hackazon_data:
